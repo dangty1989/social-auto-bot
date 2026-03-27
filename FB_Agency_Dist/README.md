@@ -90,6 +90,52 @@ python app/verify.py
 
 ---
 
+## 🔗 Tích Hợp N8N (Tự Động Hoá 100%)
+
+**N8N là gì?** Công cụ workflow automation không cần code - kết nối nhiều ứng dụng lại với nhau.
+
+### Bạn Có Thể Làm:
+
+✅ Tự động đăng bài từ **Google Sheets** hàng ngày  
+✅ Gửi báo cáo qua **Email / Slack / Telegram** tự động  
+✅ Kết hợp với **Database** để quản lý nội dung  
+✅ Hẹn giờ phức tạp (đăng vào thứ 2-5 lúc 8h sáng, v.v.)  
+
+### Quick Start:
+
+```bash
+# Cài N8N
+npm install -g n8n
+
+# Chạy N8N
+n8n start
+
+# Mở: http://127.0.0.1:5678
+```
+
+👉 **[Hướng Dẫn Chi Tiết: N8N + Playwright](docs/N8N_INTEGRATION.md)**
+
+---
+
+## 🤖 Hệ Thống Tự Động Hoá Nâng Cao (N8N + AI + Playwright + NCA)
+
+**Muốn xây dựng hệ thống professional?** Kết hợp:
+- **N8N**: Workflow automation (lên lịch, control flow)
+- **AI (Perplexity)**: Phân tích & tạo nội dung thông minh
+- **Playwright**: Tự động hoá Facebook
+- **NCA Toolkit**: Xử lý media (video, ảnh, audio, captions)
+
+### Các Tình Huống:
+
+✅ **YouTube Curator**: Tìm video hot hôm nay → Tạo captions → Đăng Facebook auto  
+✅ **Batch Posting**: Đọc content từ Google Sheets → AI enhance → NCA process → Post  
+✅ **Smart Analytics**: Perplexity phân tích tâm lý khán giả → Đăng bài lúc best time  
+✅ **Multi-Channel**: Post cùng lúc lên Facebook, Instagram, Telegram  
+
+👉 **[Hướng Dẫn Hoàn Chỉnh: Advanced Automation System](docs/ADVANCED_AUTOMATION_SYSTEM.md)**
+
+---
+
 ## ⚙️ Cấu Hình
 
 ### Sao chép mẫu cấu hình
@@ -135,6 +181,7 @@ python app/verify.py
 
 - [Hướng Dẫn Chi Tiết Cho Khách Hàng](docs/HUONG_DAN_KHACH_HANG.md)
 - [Hướng Dẫn Triển Khai](docs/DEPLOYMENT_GUIDE.md)
+- [🔗 Kết Hợp N8N + Playwright (Advanced)](docs/N8N_INTEGRATION.md) - Tự động hóa toàn bộ qua N8N workflow
 
 ---
 
