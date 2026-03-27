@@ -1,0 +1,174 @@
+version: '3.8'
+
+# Cấu hình cho PRODUCTION (VPS)
+# Sử dụng: docker-compose -f docker-compose.prod.yml up -d
+# 
+# Yêu cầu: .env phải có các biến:
+# - VPS_DOMAIN=your-domain.com
+# - SSL_EMAIL=your-email@gmail.com
+# - FACEBOOK_EMAIL, FACEBOOK_PASSWORD, v.v.
+
+services:
+  # ============ Traefik Proxy + SSL/HTTPS ============
+  traefik:
+    image: traefik:latest
+    container_name: traefik-proxy
+    restart: unless-stopped
+    command:
+      # Enable API
+      - "--api=true"
+      - "--api.insecure=true"  # Dashboard tại :8080/dashboard
+      
+      # Docker provider
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      
+      # HTTP entrypoint + redirect to HTTPS
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      
+      # HTTPS entrypoint
+      - "--entrypoints.websecure.address=:443"
+      
+      # Let's Encrypt SSL
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${SSL_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - traefik_data:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  # ============ TY Automation Dashboard ============
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ty-automation-dashboard
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      # Traefik routing
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`${VPS_DOMAIN}`)"
+      - "traefik.http.routers.dashboard.entrypoints=web,websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.dashboard.loadbalancer.server.port=5000"
+      
+      # Security headers (optional)
+      - "traefik.http.middlewares.secure.headers.sslredirect=true"
+      - "traefik.http.middlewares.secure.headers.sslhost=${VPS_DOMAIN}"
+      - "traefik.http.routers.dashboard.middlewares=secure"
+    volumes:
+      # Persistent data volumes
+      - dashboard_profiles:/app/data/profiles
+      - dashboard_logs:/app/data/logs
+      - dashboard_reports:/app/data/reports
+      - dashboard_schedules:/app/data/schedules
+    env_file:
+      - .env
+    environment:
+      FLASK_ENV: production
+      PYTHONUNBUFFERED: 1
+      PROFILE_DIR: /app/data/profiles
+      LOG_DIR: /app/data/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  # ============ n8n Workflow Engine ============
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: ty-automation-n8n
+    restart: unless-stopped
+    networks:
+      - traefik-network
+    labels:
+      # Traefik routing (sub-domain)
+      - "traefik.enable=true"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.${VPS_DOMAIN}`)"
+      - "traefik.http.routers.n8n.entrypoints=web,websecure"
+      - "traefik.http.routers.n8n.tls.certresolver=letsencrypt"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    env_file:
+      - .env
+    environment:
+      # n8n config
+      N8N_HOST: "n8n.${VPS_DOMAIN}"
+      N8N_PROTOCOL: "https"
+      N8N_PORT: 5678
+      N8N_SECURE_COOKIE: "true"
+      NODE_ENV: "production"
+      
+      # Database (optional for production)
+      # DB_TYPE: postgres
+      # DB_POSTGRESDB_USER: n8n
+      # DB_POSTGRESDB_PASS: ${DB_N8N_PASSWORD}
+      # DB_POSTGRESDB_HOST: postgres
+      # DB_POSTGRESDB_PORT: 5432
+      # DB_POSTGRESDB_DATABASE: n8n
+    depends_on:
+      - dashboard
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  # ============ PostgreSQL Database (Optional) ============
+  # Uncomment để sử dụng PostgreSQL cho n8n (recommended for production)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: ty-automation-postgres
+  #   restart: unless-stopped
+  #   networks:
+  #     - traefik-network
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: n8n
+  #     POSTGRES_USER: n8n
+  #     POSTGRES_PASSWORD: ${DB_N8N_PASSWORD}
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "50m"
+  #       max-file: "5"
+
+# ============ Volumes (Persistent Storage) ============
+volumes:
+  traefik_data:
+    driver: local
+  n8n_data:
+    driver: local
+  dashboard_profiles:
+    driver: local
+  dashboard_logs:
+    driver: local
+  dashboard_reports:
+    driver: local
+  dashboard_schedules:
+    driver: local
+  # postgres_data:
+  #   driver: local
+
+# ============ Networks ============
+networks:
+  traefik-network:
+    driver: bridge
