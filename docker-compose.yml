@@ -1,0 +1,72 @@
+version: '3.8'
+
+# Cấu hình cho development + testing
+# Sử dụng: docker-compose up -d
+
+services:
+  # ============ TY Automation Dashboard ============
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ty-automation-dashboard
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount dự liệu để persist ngay cả khi container dừng
+      - ./data/profiles:/app/data/profiles
+      - ./data/logs:/app/data/logs
+      - ./data/reports:/app/data/reports
+      - ./data/schedules:/app/data/schedules
+    env_file:
+      - .env
+    environment:
+      # Flask config
+      FLASK_ENV: development
+      FLASK_APP: app.dashboard:app
+      PYTHONUNBUFFERED: 1
+      
+      # Facebook profile storage location
+      PROFILE_DIR: /app/data/profiles
+      LOG_DIR: /app/data/logs
+    restart: unless-stopped
+    networks:
+      - ty-network
+    # Logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+
+  # ============ n8n Workflow Engine ============
+  # Optional: Chỉ enable nếu muốn n8n trong Docker
+  # Bỏ comment dòng sau để kích hoạt
+  # n8n:
+  #   image: n8nio/n8n:latest
+  #   container_name: ty-automation-n8n
+  #   ports:
+  #     - "5678:5678"
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     N8N_HOST: localhost
+  #     N8N_PORT: 5678
+  #     WEBHOOK_TUNNEL_URL: http://localhost:5678/
+  #   restart: unless-stopped
+  #   networks:
+  #     - ty-network
+  #   depends_on:
+  #     - dashboard
+
+# ============ Volumes (Persistent Storage) ============
+volumes:
+  n8n_data:
+    driver: local
+
+# ============ Networks ============
+networks:
+  ty-network:
+    driver: bridge
