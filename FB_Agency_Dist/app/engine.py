@@ -1,6 +1,6 @@
 """
-TY AUTOMATION - Facebook Client Engine
-Core engine dung Playwright de dang bai Facebook tu dong
+TY AUTOMATION - Động cơ Khách Hàng Facebook
+Dùng Playwright để tự động đăng bài trên Facebook cá nhân
 """
 import os, sys, time, random, argparse, json
 from datetime import datetime
@@ -19,6 +19,7 @@ os.makedirs(LOGS_DIR, exist_ok=True)
 
 
 class FBClient:
+    """Lớp quản lý tài khoản Facebook (đăng nhập, đăng bài)"""
     def __init__(self, profile_name):
         self.profile_name = profile_name
         self.profile_dir = os.path.join(PROFILES_DIR, profile_name)
@@ -26,6 +27,7 @@ class FBClient:
         os.makedirs(self.profile_dir, exist_ok=True)
 
     def _log(self, action, status, message=""):
+        """Ghi nhật ký mỗi hành động vào file JSON"""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
             "action": action,
@@ -41,12 +43,14 @@ class FBClient:
                 logs = []
         logs.append(log_entry)
         with open(self.log_file, 'w', encoding='utf-8') as f:
-            json.dump(logs[-100:], f, ensure_ascii=False, indent=2)
+            json.dump(logs[-100:], f, ensure_ascii=False, indent=2)  # Giới hạn 100 entries
 
     def _delay(self, min_sec=3, max_sec=7):
+        """Chờ ngẫu nhiên giữa các hành động (giống con người)"""
         time.sleep(random.uniform(min_sec, max_sec))
 
     def _type_human(self, locator, text):
+        """Gõ từng ký tự chậm (tránh phát hiện bot)"""
         if not text:
             return
         for char in text:

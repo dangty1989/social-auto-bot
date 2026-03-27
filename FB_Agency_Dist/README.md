@@ -1,99 +1,170 @@
-# TY AUTOMATION - Facebook Auto Post
+# 📱 TY AUTOMATION - Hệ Thống Đăng Bài Facebook Tự Động
 
-He thong tu dong dang bai len Facebook ca nhan.
+**Công cụ mạnh mẽ giúp bạn đăng bài trên Facebook cá nhân một cách tự động.**
+- ⏱️ Hẹn giờ đăng bài (hàng ngày, hàng tuần)
+- 🎬 Hỗ trợ Feed + Reel
+- 📊 Báo cáo hoạt động hàng ngày
+- 👥 Quản lý nhiều tài khoản Facebook
+- 🌐 Giao diện web đơn giản (không cần dòng lệnh)
 
+---
 
-## BAT DAU NHANH
+## 🚀 Bắt Đầu Nhanh (2 Bước)
 
-### Lan dau tien
-1. Double-click **SETUP.bat** (cho 5-10 phut de cai dat)
-2. Double-click **DASHBOARD.bat** de mo giao dien
+### **Lần Đầu Tiên**
+1. **Nhấp đúp vào `SETUP.bat`** → Chượng trình sẽ tự cài đặt (mất 5-10 phút)
+2. **Nhấp đúp vào `DASHBOARD.bat`** → Trình duyệt sẽ mở giao diện
 
-### Hang ngay
-- Double-click **DASHBOARD.bat** -> Mo trinh duyet -> Dang bai
+### **Hàng Ngày**
+- **Nhấp đúp `DASHBOARD.bat`** → Viết bài → Nhấn "Đăng Bài" → Xong!
 
+---
 
-## CAU TRUC THU MUC
+## 📂 Cấu Trúc Thư Mục
 
 ```
-FB_Agency_Dist/
-├── SETUP.bat          <- Cai dat (chay 1 lan)
-├── DASHBOARD.bat      <- Mo giao dien (chay hang ngay)
-├── README.md          <- File nay
-├── .env.example       <- Mau cau hinh
-├── requirements.txt   <- Thu vien Python
+social-auto-bot/
+├── SETUP.bat              Cài đặt (chạy 1 lần lần đầu)
+├── DASHBOARD.bat          Mở giao diện web (chạy hàng ngày)
+├── README.md              Hướng dẫn này
+├── requirements.txt       Thư viện cần thiết
+├── .env.example           Mẫu cấu hình
 │
-├── app/               <- Code (KHONG CAN MO)
-│   ├── engine.py      <- Core Facebook automation
-│   ├── dashboard.py   <- Web UI
-│   ├── scheduler.py   <- Hen gio dang bai
-│   ├── report.py      <- Bao cao hang ngay
-│   ├── verify.py      <- Kiem tra he thong
-│   └── templates/     <- Giao dien HTML
+├── app/                   Mã lập trình (không cần chỉnh sửa)
+│   ├── engine.py          Động cơ Facebook (Playwright + Automation)
+│   ├── dashboard.py       Giao diện web (Flask)
+│   ├── scheduler.py       Hẹn giờ đăng bài
+│   ├── report.py          Tạo báo cáo hàng ngày
+│   ├── verify.py          Kiểm tra lỗi hệ thống
+│   └── templates/         Mã HTML giao diện
 │
-├── docs/              <- Tai lieu them (tuy chon)
+├── docs/                  Tài liệu bổ sung
+│   ├── HUONG_DAN_KHACH_HANG.md
+│   └── DEPLOYMENT_GUIDE.md
 │
-└── data/              <- Du lieu (TU DONG TAO)
-    ├── profiles/      <- Phien dang nhap Facebook
-    ├── logs/          <- Lich su hoat dong
-    ├── reports/       <- Bao cao HTML
-    └── schedules/     <- Lich hen gio
+└── data/                  Dữ liệu (tự động tạo - không cần động)
+    ├── profiles/          Lưu phiên đăng nhập Facebook
+    ├── logs/              Lịch sử hoạt động
+    ├── reports/           Báo cáo HTML
+    └── schedules/         Lịch hẹn giờ đăng bài
 ```
 
+---
 
-## TINH NANG
+## ✨ Các Tính Năng Chính
 
-- **Dang bai Feed**: Text + anh/video
-- **Dang Reel**: Video ngan
-- **Hen gio**: Tu dong dang theo lich (1 lan / hang ngay / hang tuan)
-- **Bao cao**: Thong ke hoat dong hang ngay (HTML + email)
-- **Da profile**: Quan ly nhieu tai khoan Facebook
+| Tính Năng | Mô Tả |
+|-----------|-------|
+| **📝 Đăng Bài Feed** | Đăng Text + Ảnh/Video lên Feed cá nhân |
+| **🎬 Đăng Reel** | Đăng video ngắn (Reels) |
+| **⏰ Hẹn Giờ** | Đăng tự động vào thời gian bạn chỉ định (1 lần, hàng ngày, hàng tuần) |
+| **📊 Báo Cáo** | Thống kê hoạt động hàng ngày (HTML + Email) |
+| **👥 Nhiều Tài Khoản** | Quản lý và đăng bài trên nhiều tài khoản Facebook |
+| **🔐 Bảo Mật** | Lưu phiên đăng nhập an toàn (không cần nhập mật khẩu mỗi lần) |
 
+---
 
-## SU DUNG NANG CAO (CLI)
+## 💻 Sử Dụng Dòng Lệnh (Advanced)
+
+Mở **Command Prompt** hoặc **PowerShell** trong thư mục và chạy:
 
 ```bash
-# Dang nhap Facebook
+# Đăng nhập Facebook (lần đầu)
 python app/engine.py login --profile profile_1
 
-# Dang bai feed
-python app/engine.py post_feed --profile profile_1 --content "Noi dung bai viet"
+# Đăng bài Feed
+python app/engine.py post_feed --profile profile_1 --content "Nội dung bài viết"
 
-# Dang reel
-python app/engine.py post_reel --profile profile_1 --media video.mp4 --content "Mo ta"
+# Đăng Reel
+python app/engine.py post_reel --profile profile_1 --media video.mp4 --content "Mô tả video"
 
-# Quan ly lich hen gio
+# Quản lý hẹn giờ
 python app/scheduler.py
 
-# Tao bao cao
+# Tạo báo cáo
 python app/report.py
 
-# Kiem tra he thong
+# Kiểm tra hệ thống
 python app/verify.py
 ```
 
+---
 
-## CAU HINH
+## ⚙️ Cấu Hình
 
-Sao chep `.env.example` thanh `.env` va sua cac gia tri:
+### Sao chép mẫu cấu hình
+1. Sao chép file `.env.example` → Đổi tên thành `.env`
+2. Mở `.env` bằng Notepad → Sửa các giá trị:
 
-| Bien              | Mo ta                    | Mac dinh         |
-|-------------------|--------------------------|------------------|
-| FB_PROFILES_DIR   | Thu muc luu profile      | ./data/profiles  |
-| LOGS_DIR          | Thu muc logs             | ./data/logs      |
-| REPORTS_DIR       | Thu muc bao cao          | ./data/reports   |
-| SCHEDULES_DIR     | Thu muc lich hen         | ./data/schedules |
-| FLASK_PORT        | Cong web dashboard       | 5000             |
-| FLASK_HOST        | Host dashboard           | 127.0.0.1        |
+```
+# Đường dẫn dữ liệu
+FB_PROFILES_DIR=./data/profiles
+LOGS_DIR=./data/logs
+REPORTS_DIR=./data/reports
+SCHEDULES_DIR=./data/schedules
 
+# Giao diện web
+FLASK_PORT=5000          (cổng, thay đổi nếu bị xung đột)
+FLASK_HOST=127.0.0.1     (chỉ chạy ở máy local)
 
-## XU LY LOI
+# Email báo cáo (tùy chọn)
+REPORT_EMAIL_TO=your_email@gmail.com
+REPORT_EMAIL_FROM=automation_account@gmail.com
+REPORT_EMAIL_PASSWORD=xxxx xxxx xxxx xxxx  (App Password từ Gmail)
+```
 
-| Van de                    | Cach xu ly                              |
-|---------------------------|-----------------------------------------|
-| SETUP.bat bao loi Python  | Cai Python 3.8+ va tick "Add to PATH"   |
-| Dashboard khong mo        | Kiem tra port 5000, chay lai DASHBOARD.bat |
-| Dang bai that bai         | Dang nhap lai Facebook (Dang nhap button) |
-| Chrome khong mo           | Chay `playwright install chromium`       |
+---
 
-Chay `python app/verify.py` de kiem tra toan bo he thong.
+## 🛠️ Xử Lý Lỗi
+
+| Lỗi | Giải Pháp |
+|-----|----------|
+| **"Python không tìm thấy"** | Cài Python 3.8+ từ python.org → Tick "Add Python to PATH" |
+| **"Dashboard không mở"** | Kiểm tra port 5000 có bị chiếm không → Chạy lại DASHBOARD.bat |
+| **"Đăng bài thất bại"** | Đăng nhập lại Facebook (bấm nút "Đăng Nhập" trên Dashboard) |
+| **"Chrome không mở"** | Chạy: `playwright install chromium` |
+
+### Kiểm Tra Toàn Bộ Hệ Thống
+```
+python app/verify.py
+```
+
+---
+
+## 📖 Tài Liệu Thêm
+
+- [Hướng Dẫn Chi Tiết Cho Khách Hàng](docs/HUONG_DAN_KHACH_HANG.md)
+- [Hướng Dẫn Triển Khai](docs/DEPLOYMENT_GUIDE.md)
+
+---
+
+## 📝 Lưu Ý Quan Trọng
+
+✅ **An toàn:**
+- Phiên đăng nhập được lưu an toàn (Chrome profile)
+- Mật khẩu KHÔNG được lưu trữ
+- Code hoàn toàn minh bạch (bạn có thể xem toàn bộ)
+
+⚠️ **Tuân thủ:**
+- Chỉ sử dụng cho tài khoản Facebook cá nhân của bạn
+- Tuân thủ Điều Khoản Dịch Vụ của Facebook
+- Không spam, không gửi mail rác
+
+---
+
+## 🤝 Hỗ Trợ & Phản Hồi
+
+Nếu gặp lỗi:
+1. Chạy `python app/verify.py` để kiểm tra hệ thống
+2. Xem thư mục `data/logs/` để đọc lịch sử lỗi
+3. Kiểm tra file `docs/HUONG_DAN_KHACH_HANG.md`
+
+---
+
+## 📄 License
+
+Miễn phí sử dụng (MIT License)
+
+---
+
+**Chúc bạn sử dụng thành công! 🎉**
