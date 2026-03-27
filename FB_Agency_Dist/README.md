@@ -117,25 +117,6 @@ n8n start
 
 ---
 
-## 🤖 Hệ Thống Tự Động Hoá Nâng Cao (N8N + AI + Playwright + NCA)
-
-**Muốn xây dựng hệ thống professional?** Kết hợp:
-- **N8N**: Workflow automation (lên lịch, control flow)
-- **AI (Perplexity)**: Phân tích & tạo nội dung thông minh
-- **Playwright**: Tự động hoá Facebook
-- **NCA Toolkit**: Xử lý media (video, ảnh, audio, captions)
-
-### Các Tình Huống:
-
-✅ **YouTube Curator**: Tìm video hot hôm nay → Tạo captions → Đăng Facebook auto  
-✅ **Batch Posting**: Đọc content từ Google Sheets → AI enhance → NCA process → Post  
-✅ **Smart Analytics**: Perplexity phân tích tâm lý khán giả → Đăng bài lúc best time  
-✅ **Multi-Channel**: Post cùng lúc lên Facebook, Instagram, Telegram  
-
-👉 **[Hướng Dẫn Hoàn Chỉnh: Advanced Automation System](docs/ADVANCED_AUTOMATION_SYSTEM.md)**
-
----
-
 ## ⚙️ Cấu Hình
 
 ### Sao chép mẫu cấu hình
@@ -181,7 +162,8 @@ python app/verify.py
 
 - [Hướng Dẫn Chi Tiết Cho Khách Hàng](docs/HUONG_DAN_KHACH_HANG.md)
 - [Hướng Dẫn Triển Khai](docs/DEPLOYMENT_GUIDE.md)
-- [🔗 Kết Hợp N8N + Playwright (Advanced)](docs/N8N_INTEGRATION.md) - Tự động hóa toàn bộ qua N8N workflow
+- [🔗 N8N + Playwright Cơ Bản](docs/N8N_INTEGRATION.md) - Kết hợp n8n và Playwright đăng Facebook
+- [🚀 **N8N + AI + Playwright + NCA Toolkit (Toàn Diện)**](docs/N8N_AI_PLAYWRIGHT_NCA.md) - Hệ thống automation đầy đủ: social media + video pipeline + lead gen
 
 ---
 
